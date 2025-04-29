@@ -83,6 +83,9 @@ export const AppContextProvider = (props) => {
      
         if(user){
             try {
+                if(!user){
+                    return toast.error('please login')
+                }
                 const token  = await getToken()
                 await axios.post('/api/cart/update',{cartData},{headers:{Authorization:`Bearer ${token}`}})
                 toast.success("Item added to cart")
