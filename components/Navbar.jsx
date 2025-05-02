@@ -250,6 +250,16 @@ const Navbar = () => {
                 labelIcon={<BagIcon/>}
                 onClick={() => setSearchVisible(!searchVisible)}
               />
+              <UserButton.Action
+                label="About"
+                labelIcon={<BagIcon/>}
+                onClick={() => router.push('/about')}
+              />
+              <UserButton.Action
+                label="Contact"
+                labelIcon={<BagIcon/>}
+                onClick={() => router.push('/contact')}
+              />
             </UserButton.MenuItems>
           </UserButton>
         ) : (
