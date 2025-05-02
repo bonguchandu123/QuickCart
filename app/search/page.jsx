@@ -1,6 +1,6 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation'; // Client-side hook
 
 import ProductCard from '@/components/ProductCard';
 import Footer from '@/components/Footer';
@@ -36,7 +36,7 @@ const SearchPage = () => {
   }, [query]); // watch query only
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Navbar />
       <div className="flex flex-col items-start px-6 md:px-16 lg:px-32">
         <div className="flex flex-col items-end pt-12">
@@ -57,7 +57,7 @@ const SearchPage = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </Suspense>
   );
 };
 
