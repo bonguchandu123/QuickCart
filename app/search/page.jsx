@@ -1,13 +1,12 @@
-'use client'
-import React, { useEffect, useState } from 'react';
+'use client';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
-// Dynamically import the ProductCard, Footer, and Navbar components
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-
+// Dynamically import ProductCard
 const ProductCard = dynamic(() => import('@/components/ProductCard'), { ssr: false });
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
@@ -64,4 +63,11 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+// Wrap SearchPage with Suspense to avoid the "missing Suspense" error
+export default function Page() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <SearchPage />
+    </Suspense>
+  );
+}
