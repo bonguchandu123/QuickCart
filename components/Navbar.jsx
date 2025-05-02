@@ -183,10 +183,6 @@ const Navbar = () => {
           />
         </div>
     
-          <a className="hover:text-gray-900 transition">
-            <Image onClick={router.push('/chat')} className="w-6 h-6" src={assets.chat_icon} alt="chat icon" />
-          </a>
-     
         
 
       

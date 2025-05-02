@@ -1,25 +1,23 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
-import ProductCard from '@/components/ProductCard';
-import Footer from '@/components/Footer';
+// Dynamically import the ProductCard, Footer, and Navbar components
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+
+const ProductCard = dynamic(() => import('@/components/ProductCard'), { ssr: false });
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query');
-  console.log(query)
+  console.log(query);
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Ensure we are only accessing location on the client-side
-    if (typeof window !== "undefined" && typeof window.location !== "undefined") {
-      console.log(window.location); // Example of using location in the browser
-    }
-
     if (query) {
       const fetchFilteredProducts = async () => {
         try {
