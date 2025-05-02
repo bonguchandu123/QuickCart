@@ -1,34 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const HeaderSlider = () => {
-  const sliderData = [
-    {
-      id: 1,
-      title: "Experience Pure Sound - Your Perfect Headphones Awaits!",
-      offer: "Limited Time Offer 30% Off",
-      buttonText1: "Buy now",
-      buttonText2: "Find more",
-      imgSrc: assets.header_headphone_image,
-    },
-    {
-      id: 2,
-      title: "Next-Level Gaming Starts Here - Discover PlayStation 5 Today!",
-      offer: "Hurry up only few lefts!",
-      buttonText1: "Shop Now",
-      buttonText2: "Explore Deals",
-      imgSrc: assets.header_playstation_image,
-    },
-    {
-      id: 3,
-      title: "Power Meets Elegance - Apple MacBook Pro is Here for you!",
-      offer: "Exclusive Deal 40% Off",
-      buttonText1: "Order Now",
-      buttonText2: "Learn More",
-      imgSrc: assets.header_macbook_image,
-    },
-  ];
+  const {getToken} = useAppContext()
+  const [sliderData ,setSliderData] = useState([]);
+
+  const fetching = async () => {
+    try {
+      const token = await getToken()
+    const {data} = await axios.get('/api/slidder/get',{headers:{Authorization:`Bearer ${token}`}})
+    if(data.success){
+      setSliderData(data.slidders)
+    }else{
+      return toast.error(data.message)
+    }
+
+      
+    } catch (error) {
+      return toast.error(error.message)
+      
+    }
+    
+    
+
+  }
+
+
+  
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -40,8 +42,14 @@ const HeaderSlider = () => {
   }, [sliderData.length]);
 
   const handleSlideChange = (index) => {
+
     setCurrentSlide(index);
   };
+
+  useEffect(() => {
+    fetching()
+
+  },[sliderData])
 
   return (
     <div className="overflow-hidden relative w-full">
@@ -53,7 +61,7 @@ const HeaderSlider = () => {
       >
         {sliderData.map((slide, index) => (
           <div
-            key={slide.id}
+            key={slide._id}
             className="flex flex-col-reverse md:flex-row items-center justify-between bg-[#E6E9F2] py-8 md:px-14 px-5 mt-6 rounded-xl min-w-full"
           >
             <div className="md:pl-8 mt-10 md:mt-0">
@@ -72,11 +80,14 @@ const HeaderSlider = () => {
               </div>
             </div>
             <div className="flex items-center flex-1 justify-center">
-              <Image
-                className="md:w-72 w-48"
-                src={slide.imgSrc}
-                alt={`Slide ${index + 1}`}
-              />
+            <Image
+  src={slide.imgSrc}
+  alt={`Slide ${index + 1}`}
+  width={300} // set appropriate width
+  height={300}
+  className="md:w-72 w-48"
+/>
+
             </div>
           </div>
         ))}

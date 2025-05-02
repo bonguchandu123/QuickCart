@@ -1,6 +1,34 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const NewsLetter = () => {
+  const [email,setEmail] = useState('');
+
+  const onChange = async(e) => {
+
+    e.preventDefault()
+    try {
+      const {data} = await axios.post('/api/email/add',{email})
+      if(data.success){
+        toast.success(data.message)
+        setEmail('')
+      }else{
+        toast.error(data.message)
+      }
+  
+      
+    } catch (error) {
+      toast.error(error.message)
+      
+    }
+
+   
+
+
+  }
+
+ 
   return (
     <div className="flex flex-col items-center justify-center text-center space-y-2 pt-8 pb-14">
       <h1 className="md:text-4xl text-2xl font-medium">
@@ -10,16 +38,16 @@ const NewsLetter = () => {
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry.
       </p>
-      <div className="flex items-center justify-between max-w-2xl w-full md:h-14 h-12">
-        <input
+      <form  onSubmit={onChange} className="flex items-center justify-between max-w-2xl w-full md:h-14 h-12">
+        <input onChange={(e) => setEmail(e.target.value)} value={email}
           className="border border-gray-500/30 rounded-md h-full border-r-0 outline-none w-full rounded-r-none px-3 text-gray-500"
           type="text"
           placeholder="Enter your email id"
         />
-        <button className="md:px-12 px-8 h-full text-white bg-orange-600 rounded-md rounded-l-none">
+        <button type="submit" className="md:px-12 px-8 h-full text-white bg-orange-600 rounded-md rounded-l-none">
           Subscribe
         </button>
-      </div>
+      </form>
     </div>
   );
 };
